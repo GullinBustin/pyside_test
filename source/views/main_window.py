@@ -34,10 +34,10 @@ class MainView(QMainWindow):
         self.step_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
         self.count_btn = QPushButton("Click me!", self)
-        self._model.clicks_changed.connect(self.click_update)
+        self._model.clicks_count_signal.connect(self.clicks_count_update)
 
         self.long_running_btn = QPushButton("Long-Running Task!", self)
-        self._model.long_task_changed.connect(self.long_task_update)
+        self._model.long_task_step_signal.connect(self.long_task_step_update)
         self._model.long_task_is_running_signal.connect(self.disable_button)
 
         # Set the layout
@@ -50,11 +50,11 @@ class MainView(QMainWindow):
         self.central_widget.setLayout(layout)
 
     @pyqtSlot(int)
-    def click_update(self):
+    def clicks_count_update(self):
         self.clicks_label.setText(f"Counting: {self._model.clicks_count} clicks")
 
     @pyqtSlot(int)
-    def long_task_update(self):
+    def long_task_step_update(self):
         self.step_label.setText(f"Long-Running Step: {self._model.long_task_step}")
 
     @pyqtSlot(bool)

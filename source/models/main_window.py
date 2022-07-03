@@ -2,8 +2,8 @@ from PySide2.QtCore import Qt, QObject, QThread, Signal as pyqtSignal
 
 
 class MainModel(QObject):
-    clicks_changed = pyqtSignal(int)
-    long_task_changed = pyqtSignal(int)
+    clicks_count_signal = pyqtSignal(int)
+    long_task_step_signal = pyqtSignal(int)
     long_task_is_running_signal = pyqtSignal(bool)
 
     def __init__(self):
@@ -19,7 +19,7 @@ class MainModel(QObject):
     @clicks_count.setter
     def clicks_count(self, value):
         self._clicks_count = value
-        self.clicks_changed.emit(value)
+        self.clicks_count_signal.emit(value)
 
     @property
     def long_task_step(self):
@@ -28,7 +28,7 @@ class MainModel(QObject):
     @long_task_step.setter
     def long_task_step(self, value):
         self._long_task_count = value
-        self.long_task_changed.emit(value)
+        self.long_task_step_signal.emit(value)
 
     @property
     def long_task_is_running(self):
