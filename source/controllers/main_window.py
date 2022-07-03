@@ -16,9 +16,12 @@ class Worker(QObject):
 
 class MainController(QObject):
 
-    def __init__(self, model):
+    def __init__(self, model, view):
         super().__init__()
         self._model = model
+        self._view = view
+        self._view.long_running_btn.clicked.connect(self.add_long_task)
+        self._view.count_btn.clicked.connect(self.add_click)
 
     def add_click(self):
         self._model.clicks_count += 1

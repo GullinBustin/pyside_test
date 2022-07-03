@@ -9,8 +9,8 @@ from controllers.main_window import MainController
 def main():
     app = QApplication(sys.argv)
     main_model = MainModel()
-    main_controller = MainController(main_model)
-    win = MainView(main_model, main_controller)
+    win = MainView(main_model)
+    main_controller = MainController(main_model, win)
     win.show()
     sys.exit(app.exec_())
 

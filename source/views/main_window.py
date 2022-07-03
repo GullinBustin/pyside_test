@@ -10,7 +10,7 @@ from PySide2.QtWidgets import (
 
 
 class MainView(QMainWindow):
-    def __init__(self, model, controller):
+    def __init__(self, model):
         super().__init__()
 
         self.count_btn = None
@@ -20,7 +20,6 @@ class MainView(QMainWindow):
         self.long_running_btn = None
 
         self._model = model
-        self._controller = controller
         self.setup_ui()
 
     def setup_ui(self):
@@ -35,11 +34,9 @@ class MainView(QMainWindow):
         self.step_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
         self.count_btn = QPushButton("Click me!", self)
-        self.count_btn.clicked.connect(self._controller.add_click)
         self._model.clicks_changed.connect(self.click_update)
 
         self.long_running_btn = QPushButton("Long-Running Task!", self)
-        self.long_running_btn.clicked.connect(self._controller.add_long_task)
         self._model.long_task_changed.connect(self.long_task_update)
         self._model.long_task_is_running_signal.connect(self.disable_button)
 
