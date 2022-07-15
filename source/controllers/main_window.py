@@ -1,5 +1,9 @@
 import time
+
 from PySide2.QtCore import Qt, QObject, QThread, Signal as pyqtSignal
+
+from source.views.main_window import MainView
+from source.models.main_window import MainModel
 
 
 class LongTask(QThread):
@@ -16,13 +20,19 @@ class LongTask(QThread):
 
 class MainController(QObject):
 
-    def __init__(self, model, view):
+    def __init__(self):
         super().__init__()
-        self._model = model
-        self._view = view
+        self._model = MainModel()
+        self._view = MainView()
         self._view.long_running_btn.clicked.connect(self.run_long_task)
         self._view.count_btn.clicked.connect(self.add_click)
         self.thread = None
+        self.connect_view_with_model()
+
+    def connect_view_with_model(self):
+        self._model.clicks_count_signal.connect(self._view.clicks_count_update)
+        self._model.long_task_step_signal.connect(self._view.long_task_step_update)
+        self._model.long_task_is_running_signal.connect(self._view.disable_button)
 
     def add_click(self):
         self._model.clicks_count += 1
@@ -43,3 +53,6 @@ class MainController(QObject):
         self.update_long_task_step(0)
         self.update_long_task_running(True)
         self.thread.start()
+
+    def show(self):
+        self._view.show()

@@ -10,7 +10,7 @@ from PySide2.QtWidgets import (
 
 
 class MainView(QMainWindow):
-    def __init__(self, model):
+    def __init__(self):
         super().__init__()
 
         self.count_btn = None
@@ -19,7 +19,6 @@ class MainView(QMainWindow):
         self.central_widget = None
         self.long_running_btn = None
 
-        self._model = model
         self.setup_ui()
 
     def setup_ui(self):
@@ -34,11 +33,7 @@ class MainView(QMainWindow):
         self.step_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
 
         self.count_btn = QPushButton("Click me!", self)
-        self._model.clicks_count_signal.connect(self.clicks_count_update)
-
         self.long_running_btn = QPushButton("Long-Running Task!", self)
-        self._model.long_task_step_signal.connect(self.long_task_step_update)
-        self._model.long_task_is_running_signal.connect(self.disable_button)
 
         # Set the layout
         layout = QVBoxLayout()
@@ -50,13 +45,13 @@ class MainView(QMainWindow):
         self.central_widget.setLayout(layout)
 
     @pyqtSlot(int)
-    def clicks_count_update(self):
-        self.clicks_label.setText(f"Counting: {self._model.clicks_count} clicks")
+    def clicks_count_update(self, value):
+        self.clicks_label.setText(f"Counting: {value} clicks")
 
     @pyqtSlot(int)
-    def long_task_step_update(self):
-        self.step_label.setText(f"Long-Running Step: {self._model.long_task_step}")
+    def long_task_step_update(self, value):
+        self.step_label.setText(f"Long-Running Step: {value}")
 
     @pyqtSlot(bool)
-    def disable_button(self):
-        self.long_running_btn.setEnabled(not self._model.long_task_is_running)
+    def disable_button(self, value):
+        self.long_running_btn.setEnabled(not value)
